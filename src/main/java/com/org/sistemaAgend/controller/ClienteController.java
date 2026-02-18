@@ -22,13 +22,16 @@ public class ClienteController {
 
     @GetMapping("/novo")
     public String formularioNovo(Model model){
-        model.addAttribute("cliente", new Cliente());
-        return "clientes/formulario"; //Página HTML
+        if(!model.containsAttribute("cliente")){
+            model.addAttribute("cliente", new Cliente());
+        }
+        return "clientes/formulario";
     }
 
     @PostMapping("/salvar")
-    public String salvar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes){
+    public String salvar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes, Model model){
         if(result.hasErrors()){
+            model.addAttribute("cliente", cliente);
             return "clientes/formulario";
         }
 
@@ -38,6 +41,7 @@ public class ClienteController {
             return "redirect:/clientes/novo";
         } catch (RuntimeException e) {
             result.rejectValue("email", "error.cliente", e.getMessage());
+            model.addAttribute("cliente", cliente);
             return "clientes/formulario";
         }
     }
