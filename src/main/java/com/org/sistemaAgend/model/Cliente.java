@@ -11,6 +11,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "tb_clientes")
+
 @Getter
 @Setter
 @NoArgsConstructor
